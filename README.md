@@ -108,3 +108,11 @@ In the case of this tutorial, we used the lazy_static crate to define the NOTIFI
 By enforcing immutability for static variables, Rust ensures that shared data cannot be accidentally modified in an unsafe manner, which could lead to data races and undefined behavior. This design choice promotes thread-safety and encourages the use of safe concurrency patterns from the outset.
 
 #### Reflection Subscriber-2
+
+1. Yes, in src/lib.rs, I learned that it serves as the entry point for creating a Rust library crate. It contains the rocket module, which is responsible for setting up the Rocket web framework and defining the routes for the application.
+
+2. The Observer pattern makes it relatively easy to plug in more subscribers (Receiver instances) to the system. Since the main application (Publisher) maintains a list of subscribers and their URLs, adding a new subscriber simply requires creating a new instance of the Receiver application and sending a subscription request with the new URL to the main application.
+
+The main application's NotificationService can then add the new subscriber to the list, and subsequent notifications will be pushed to the new subscriber automatically. This loose coupling between the Publisher and Subscribers makes it straightforward to scale the system by adding more Receiver instances as needed.
+
+3. Not yet.
