@@ -72,7 +72,7 @@ You can install Postman via this website: https://www.postman.com/downloads/
   - [x] Commit: `Create Notification database and Notification repository struct skeleton.`
   - [x] Commit: `Implement add function in Notification repository.`
   - [x] Commit: `Implement list_all_as_string function in Notification repository.`
-  - [ ] Write answers of your learning module's "Reflection Subscriber-1" questions in this README.
+  - [x] Write answers of your learning module's "Reflection Subscriber-1" questions in this README.
 - **STAGE 3: Implement services and controllers**
   - [ ] Commit: `Create Notification service struct skeleton.`
   - [ ] Commit: `Implement subscribe function in Notification service.`
@@ -92,5 +92,19 @@ This is the place for you to write reflections:
 ### Mandatory (Subscriber) Reflections
 
 #### Reflection Subscriber-1
+
+1.Using RwLock<> (Read-Write Lock) is necessary in this case because we need to allow multiple threads to read the Vec of Notifications concurrently, while still protecting the vector from concurrent modifications. The RwLock<> provides a way to achieve this by allowing multiple reader threads to access the data simultaneously, but only one writer thread can modify the data at a time.
+
+On the other hand, Mutex<> (Mutual Exclusion) is a simpler synchronization primitive that allows only one thread to access the protected data at a time, regardless of whether the access is for reading or writing. If we were to use Mutex<> in this case, it would unnecessarily serialize all access to the Vec of Notifications, even for read operations, which could lead to performance issues, especially if there are many concurrent read requests.
+
+By using RwLock<>, we can take advantage of the fact that multiple threads can safely read the Vec of Notifications simultaneously, improving the overall performance and concurrency of the application.
+
+2.In Rust, static variables are immutable by default, which means their values cannot be changed after they are initialized. This design decision is made to ensure thread-safety and prevent data races, which can lead to undefined behavior and potential crashes.
+
+Unlike Java, where you can mutate the content of a static variable through a static function or block, Rust does not allow this kind of mutation for static variables. Instead, Rust provides safer alternatives, such as using thread-safe data structures like Mutex, RwLock, or atomic types, to manage shared mutable state across threads.
+
+In the case of this tutorial, we used the lazy_static crate to define the NOTIFICATIONS vector and SUBSCRIBERS map as "lazy static" variables. These variables are initialized only once, during the first time they are accessed, and their initialization is guaranteed to be thread-safe. However, to modify the contents of these data structures, we need to use the appropriate synchronization primitives, such as RwLock for the NOTIFICATIONS vector.
+
+By enforcing immutability for static variables, Rust ensures that shared data cannot be accidentally modified in an unsafe manner, which could lead to data races and undefined behavior. This design choice promotes thread-safety and encourages the use of safe concurrency patterns from the outset.
 
 #### Reflection Subscriber-2
